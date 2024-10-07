@@ -1,10 +1,21 @@
 "use client";
-import { useState, useRef, useEffect } from 'react';
+
+import React, { useState, useRef, useEffect } from 'react';
 import { drawLandmarks } from '@mediapipe/drawing_utils';
 import { detectFist } from './model1'; // Import the fist detection function
+import { NextPage } from 'next'; // Import NextPage type
+import { Hands, Results } from '@mediapipe/hands'; // Import the types from Mediapipe
 
-// Add a prop to control rendering mode
-export default function HomePage({ showControlsOnly = false }: { showControlsOnly?: boolean }) {
+// Define the props type for your component
+interface HomePageProps {
+  searchParams?: {
+    showControlsOnly?: string; // Optional query parameter
+  };
+}
+
+// Define the component as a NextPage with specific props
+const HomePage: NextPage<HomePageProps> = ({ searchParams }) => {
+  const showControlsOnly = searchParams?.showControlsOnly === 'true'; // Handle the prop from search params
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAccuracy, setShowAccuracy] = useState(true);
@@ -12,7 +23,6 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
   const [gestureText, setGestureText] = useState("");
   const [showLandmarksOnly, setShowLandmarksOnly] = useState(false);
   const [isModel1Checked, setIsModel1Checked] = useState(false); // Checkbox for Model 1
-
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -24,8 +34,8 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
       return;
     }
 
-    let camera: any = null;
-    let hands: any = null;
+    let camera: { start: () => void; stop: () => void } | null = null;
+    let hands: Hands | null = null;
 
     const startCamera = async () => {
       setIsProcessing(true);
@@ -42,7 +52,6 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
               canvasRef.current.width = videoRef.current.videoWidth;
               canvasRef.current.height = videoRef.current.videoHeight;
 
-              const { Hands } = await import('@mediapipe/hands');
               hands = new Hands({
                 locateFile: (file: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
               });
@@ -54,7 +63,7 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
                 minTrackingConfidence: 0.6,
               });
 
-              hands.onResults((results: any) => {
+              hands.onResults((results: Results) => { // Specify Results type
                 if (hands && canvasRef.current && videoRef.current) {
                   const canvasCtx = canvasRef.current.getContext('2d');
                   if (canvasCtx) {
@@ -86,10 +95,10 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
                           // key press
                           if (gestureDetected === 'Jump') {
                             const iframe = window.gameIframe; // Access the globally stored iframe reference
-                          
+                            
                             if (iframe && iframe.contentWindow) {
                               iframe.focus();
-                          
+                              
                               // Create and dispatch a spacebar event in the iframe's content window
                               const spaceEvent = new KeyboardEvent('keydown', {
                                 key: ' ',
@@ -99,10 +108,9 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
                               });
                               iframe.contentWindow.dispatchEvent(spaceEvent);
                               window.dispatchEvent(spaceEvent);
-                              console.log('h')
-
+                              console.log('h');
                             }
-                          } 
+                          }
                         }
 
                         if (showAccuracy) {
@@ -192,8 +200,8 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
             onChange={() => setIsCameraOn(prev => !prev)}
             disabled={isProcessing}
           />
-           On/Off       
-         </label>
+          On/Off       
+        </label>
 
         <label>
           <input
@@ -252,4 +260,6 @@ export default function HomePage({ showControlsOnly = false }: { showControlsOnl
       </div>
     </div>
   );
-}
+};
+
+export default HomePage;

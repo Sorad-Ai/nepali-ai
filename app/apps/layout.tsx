@@ -9,9 +9,9 @@ const AppsLayout = ({ children }: { children: React.ReactNode }) => {
   const mainRef = useRef<HTMLDivElement | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pageTitle, setPageTitle] = useState<string | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
+  // const [setMenuOpen] = useState(false);
   const [MediapipeComponent, setMediapipeComponent] = useState<React.FC | null>(null); // For dynamic component
-  const [controlsPosition, setControlsPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  // const [setControlsPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
   const [showCamera, setShowCamera] = useState(false); // New state to control camera display
 
   const toggleFullscreen = () => {
@@ -36,21 +36,21 @@ const AppsLayout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const toggleMenu = () => {
-    setMenuOpen((prev) => {
-      if (!prev) {
-        const button = document.querySelector('.menu-btn');
-        if (button) {
-          const rect = button.getBoundingClientRect();
-          setControlsPosition({
-            top: rect.bottom + window.scrollY, // Position below the button
-            left: rect.left + window.scrollX, // Align with the button
-          });
-        }
-      }
-      return !prev;
-    });
-  };
+  // const toggleMenu = () => {
+  //   setMenuOpen((prev) => {
+  //     if (!prev) {
+  //       const button = document.querySelector('.menu-btn');
+  //       if (button) {
+  //         const rect = button.getBoundingClientRect();
+  //         setControlsPosition({
+  //           top: rect.bottom + window.scrollY, // Position below the button
+  //           left: rect.left + window.scrollX, // Align with the button
+  //         });
+  //       }
+  //     }
+  //     return !prev;
+  //   });
+  // };
 
   useEffect(() => {
     // Retrieve the page title and mediapipe path from sessionStorage
