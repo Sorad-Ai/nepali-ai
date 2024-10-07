@@ -16,8 +16,16 @@ export default function NavBar() {
   const router = useRouter();
 
   const toggleVisibility = () => {
-    setIsVisible((prev) => !prev); // Toggle search box visibility
-    setSearchIcon((prev) => (prev === 'uil-search' ? 'uil-times' : 'uil-search')); // Toggle between search and close icon
+    setIsVisible((prev) => {
+      // Toggle search box visibility and set focus if turning visible
+      const nextVisible = !prev;
+      if (nextVisible && inputRef.current) {
+        setTimeout(() => inputRef.current?.focus(), 0); // Ensure focus on open
+      }
+      return nextVisible;
+    });
+
+    setSearchIcon((prev) => (prev === 'uil-search' ? 'uil-times' : 'uil-search')); // Toggle search and close icon
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -27,13 +35,6 @@ export default function NavBar() {
     }
     setIsVisible(false); // Hide the search box after submitting
     setSearchIcon('uil-search'); // Reset icon to search
-  };
-
-  const handleKeyDown = () => {
-    // Focus the input field if the search box is visible and any key is pressed
-    if (isVisible && inputRef.current && !inputRef.current.contains(document.activeElement)) {
-      inputRef.current.focus();
-    }
   };
 
   const handleBlur = () => {
@@ -48,17 +49,14 @@ export default function NavBar() {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (isVisible && !document.querySelector('.search-box')?.contains(e.target as Node)) {
-        setIsVisible(false);
         setSearchIcon('uil-search'); // Reset icon to search when clicking outside
       }
     };
 
     document.addEventListener('click', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown); // Listen for key press when search box is visible
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isVisible]);
 

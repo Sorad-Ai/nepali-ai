@@ -99,15 +99,13 @@ const HomePage: NextPage<HomePageProps> = ({ searchParams }) => {
                             if (iframe && iframe.contentWindow) {
                               iframe.focus();
                               
-                              // Create and dispatch a spacebar event in the iframe's content window
-                              const spaceEvent = new KeyboardEvent('keydown', {
+                              // Directly dispatch the keydown event within the iframe's context
+                              iframe.contentWindow.document.dispatchEvent(new KeyboardEvent('keydown', {
                                 key: ' ',
                                 code: 'Space',
                                 keyCode: 32,
                                 bubbles: true,
-                              });
-                              iframe.contentWindow.dispatchEvent(spaceEvent);
-                              window.dispatchEvent(spaceEvent);
+                              }));
                               console.log('h');
                             }
                           }
