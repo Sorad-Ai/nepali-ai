@@ -66,7 +66,9 @@ export default function NavBar() {
 
       {/* Logo */}
       <i className="uil uil-bars navOpenBtn" ref={openNavBtnRef}></i>
-      <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+      <a href="/"
+        style={{      display: 'flex', alignItems: 'center', textDecoration: 'none', fontSize: '20px', fontWeight: 'bold' }}
+      >
         <Image
           src="https://img.icons8.com/color/200/microsoft.png"
           alt="Logo"
@@ -75,7 +77,7 @@ export default function NavBar() {
           style={{ marginRight: '10px' }}
         />
         Ai Controls
-      </Link>
+        </a>
 
       {/* List */}
       <ul className={`nav-links ${isVisible ? 'hidden' : ''}`}>
