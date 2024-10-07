@@ -1,0 +1,94 @@
+/* Dark Theme for the entire page */
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent body scroll */
+}
+
+h1, h2, h3 {
+  color: #ffffff;
+}
+
+/* Container: Use flexbox for layout and 75px margin below the navbar */
+.container {
+  display: flex;
+  flex-direction: column; /* Column layout for mobile view by default */
+  width: 100vw;
+  max-width: 1200px;
+  margin: 75px auto 0 auto; /* 75px down from the navbar */
+  padding: 20px;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+/* Main div: auto height based on content, responsive */
+.main {
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  color: #e0e0e0;
+  width: 100%;
+  height: auto; /* Height adjusts according to content */
+  max-width: 100%;
+  overflow: visible; /* Ensure no scrolling */
+  box-sizing: border-box;
+  position: relative; /* Relative to flow with content */
+}
+
+/* Cards div: dark theme for cards, scrollable */
+.cards {
+  width: 100%; /* Full width in mobile view */
+  padding: 20px;
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow-y: auto; /* Allow cards to be scrollable */
+  height: calc(100vh - 115px); /* Full height minus navbar and padding */
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Card styling */
+.card {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background-color: #383838;
+  color: #e0e0e0;
+}
+
+/* Responsive layout for tablets and larger screens */
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row; /* Row layout for larger screens */
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .main {
+    width: 60%; /* Set main to 60% width */
+    position: relative; /* Not fixed */
+    height: auto; /* Allow main to adjust height based on content */
+  }
+
+  .cards {
+    width: 30%; /* Set cards to 30% width */
+    position: relative; /* Not fixed */
+    overflow-y: auto; /* Allow cards to be scrollable */
+    height: calc(100vh - 95px); /* Adjust height to fit viewport */
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards {
+    width: 30%; /* Ensure 30% width for cards */
+  }
+
+  .main {
+    width: 60%; /* Set main to 60% width */
+  }
+}
